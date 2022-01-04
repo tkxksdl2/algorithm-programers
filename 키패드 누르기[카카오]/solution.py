@@ -10,12 +10,10 @@ def solution(numbers, hand):
 
     for n in numbers:
         if n in l_fix:
-            answer += "L"
-            l_fin = n
+            answer += "L"; l_fin = n
             continue
         elif n in r_fix:
-            answer += "R"
-            r_fin = n
+            answer += "R"; r_fin = n
             continue
         
         dists = []
@@ -25,25 +23,18 @@ def solution(numbers, hand):
         
         if dists[0] == dists[1]:
             if hand == 'left':
-                answer +='L'
-                l_fin = n
- 
+                answer +='L'; l_fin = n
             else:
-                answer += "R"
-                r_fin = n
+                answer += "R"; r_fin = n
 
         elif dists[0] < dists[1]:
-            answer +='L'
-            l_fin = n
+            answer +='L'; l_fin = n
 
         else:
-            answer += "R"
-            r_fin = n
+            answer += "R"; r_fin = n
 
     
     return answer
-
-
 
 
 numbers =[7, 0, 8, 2, 8, 3, 1, 5, 7, 6, 2]
