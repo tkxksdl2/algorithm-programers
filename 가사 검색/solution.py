@@ -6,45 +6,46 @@ def solution(words, queries):
 
     words.sort()
     words.sort(key=lambda i:len(i))
-
+    
+    
     words_reverse.sort()
     words_reverse.sort(key=lambda i:len(i))
 
-    print(words)
-    print(words_reverse)
-
     # 글자수순으로 정렬하고 경계 인덱스 저장
-    
     wordslen_idxs = get_wordslen_idx(words)
 
-
+    # 한 번 검색한 쿼리를 기억함
     query_lib = dict()
+    
     for query in queries:
         if query in query_lib.keys():
             answer.append(query_lib[query])
             continue
 
-
+        # 쿼리의 종류 확인
         head = query.startswith('?')
         tail = query.endswith('?')
+        
         length = len(query)
         cnt = 0
-
+        
+        # 맞는 길이가 없다면 자동으로 0 반환
         if length not in wordslen_idxs.keys():
             answer.append(cnt)
             query_lib[query] = cnt
             continue
-            
-            
-        
+                
+        # 모두 ? 인 경우 글자수가 맞는 경우 모두 반환
         if head and tail:
             length_match_list = words[wordslen_idxs[length][0]: wordslen_idxs[length][1]]
             cnt = len(length_match_list)
 
+        # 앞이 ? 이면 뒤집힌 words에서 검색
         elif head:
             query_reverse = query[::-1]
             cnt = bisect_getcount(words_reverse,wordslen_idxs, length, query_reverse)
-
+            
+        # 뒤가 ? 인 경우 기본 words 에서 검색
         else:
             cnt = bisect_getcount(words, wordslen_idxs,length, query)
 
@@ -54,9 +55,7 @@ def solution(words, queries):
 
     return answer
 
-words = ["frodo", 'muyah',"front", "frost", "frozen", "frame", "kakao"]
-queries = ["fro??", "????o", "fr???", "fro???", "pro?"]
-
+# 글자수에 따라 정렬된 리스트에서 글자수 변하는 위치 저장
 def get_wordslen_idx(words):
     w_len = 0
     lenthup_idxs = {0:[0]}
@@ -67,10 +66,10 @@ def get_wordslen_idx(words):
             lenthup_idxs[w_len] += [words.index(w)]
             w_len = len(w)
     lenthup_idxs[w_len] += [len(words)]
-    print(lenthup_idxs)
 
     return lenthup_idxs
 
+# bisect를 이용해 쿼리의 시작점과 끝점으로 개수 파악
 def bisect_getcount(words,wordslen_idxs, length, query):
     length_match_list = words[wordslen_idxs[length][0]: wordslen_idxs[length][1]]
     start_key = query.replace('?','a')
@@ -81,6 +80,3 @@ def bisect_getcount(words,wordslen_idxs, length, query):
 
     cnt = end - start
     return cnt
-
-
-print(solution(words,queries))

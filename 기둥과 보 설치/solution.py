@@ -1,57 +1,63 @@
 def solution(n, build_frame):
-    structure_base = [[n,0] for n in range(n+1)]
-    horizon_base = []
-    answer = []
+    answer = set()
 
     for frame in build_frame:
-        point = frame[:2]
-        structure = frame[2]
-        task = frame[3]
+        x, y, structure, task = frame
 
-        if not structure: # 기둥
-            if task:      # 건설
-
-                if point in structure_base: #건설가능
-                    endpoint = [point[0], point[1] + 1]
-                    if endpoint[1] > n:
-                        continue
-                    answer.append([point[0], point[1], structure])
-                    structure_base.append(endpoint)
-                    horizon_base.append(endpoint)
-                    horizon_base.append([endpoint[0]-1,endpoint[1]])
-                else:
-                    continue
-
-            else:         # 제거
-                pass
-        else: # 보
+        if structure: # 보
             if task:
-                if point in horizon_base: #건설가능
-                    endpoint = [point[0]+1, point[1]]
-                    if endpoint[1] > n:
-                        continue
-                    answer.append([point[0], point[1], structure])
+                if check_floor_build(x, y, answer):
+                    answer.add((x, y, 1))
+            else:
+                answer.remove((x,y,1))
+                for a_x, a_y, a_s in answer:
+                    if a_s == 1:
+                        check = check_floor_build(a_x, a_y, answer)
+                    else:
+                        check = check_pillar_build(a_x, a_y, answer)
 
-                    if endpoint + [1] not in answer:    # 다른 보와 연결되지않는다면 기둥 건설 가능
-                        structure_base.append(endpoint) 
-                                                        # 다음 위치에 다른보나 기둥이 있다면 보 건설 가능
-                    if  [endpoint[0], endpoint[1]-1, 0] in answer or  [endpoint[0]+1, endpoint[1], 1] in answer:
-                        horizon_base.append(endpoint)
+                    if not check:
+                        answer.add((x,y,1))
+                        break 
 
-                else:
-                    continue           
+        else:       # 기둥
+            if task:
+                if check_pillar_build(x, y, answer):
+                    answer.add((x, y, 0))
+            else:
+                answer.remove((x,y,0))
+                for a_x, a_y, a_s in answer:
+                    if a_s == 1:
+                        check = check_floor_build(a_x, a_y, answer)
+                    else:
+                        check = check_pillar_build(a_x, a_y, answer)
+
+                    if not check:
+                        answer.add((x,y,0))
+                        break 
     
-    print(horizon_base)
-
-
-
+    answer = [list(i) for i in answer]
+    answer.sort(key = lambda x : (x[0], x[1], x[2]))
     
     return answer
 
+def check_pillar_build(x, y, answer):
+    if y == 0 or (x,y-1,0) in answer or (x-1,y, 1) in answer or (x,y, 1) in answer:
+        return True
 
+    return False
 
-build_frame = [[1,0,0,1],[1,1,1,1],[2,1,0,1],[2,2,1,1],[5,0,0,1],[5,1,0,1],[4,2,1,1],[3,2,1,1]]
+def check_floor_build(x, y, answer):
+    if ((x-1, y, 1) in answer and (x+1, y, 1) in answer) or (x, y-1, 0) in answer or (x+1, y-1, 0) in answer:
+        return True
 
-sol = solution(5,build_frame)
+    return False
+
+    
+
+#build_frame = [[1,0,0,1],[1,1,1,1],[2,1,0,1],[2,2,1,1],[5,0,0,1],[5,1,0,1],[4,2,1,1],[3,2,1,1]]
+build_frame = [[0,0,0,1],[2,0,0,1],[4,0,0,1],[0,1,1,1],[1,1,1,1],[2,1,1,1],[3,1,1,1],[2,0,0,0],[1,1,1,0],[2,2,0,1]]
+n = 5
+sol = solution(n,build_frame)
 
 print(sol)
