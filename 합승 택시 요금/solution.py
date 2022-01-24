@@ -10,6 +10,8 @@ def solution(n, s, a, b, fares):
             fares_dict[end] = {start:fare}
         else:
             fares_dict[end][start] = fare
+    
+    print(fares_dict)
 
     root_a = []
     root_b = []
