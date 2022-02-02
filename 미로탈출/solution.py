@@ -74,4 +74,4 @@ end = 4
 roads = [[1, 2, 1], [3, 2, 1], [2, 4, 1]]
 traps = [2,3]
 
-print(solution(n, start, end, roads, traps)
+print(solution(n, start, end, roads, traps))
