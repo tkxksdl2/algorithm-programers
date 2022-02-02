@@ -9,19 +9,22 @@ def bit_mask(state, trap_idx, destination, flag):
 def solution(n, start, end, roads, traps):
     answer = 0
     INF = float('inf')
+    
+    graph = {i:[] for i in range(1,n+1)}
+    for road in roads:
+        x, y, cost = road
+        graph[x].append([y,cost,0])
+        graph[y].append([x,cost,1])
+
 
     # 함정들의 토글상태를 나타내기위한 비트 인덱스
     trap_idx ={v:i for i,v in enumerate(traps)}
     # 함정들의 토글상태 조합마다 다른 최소거리를 저장한다.
     dp = [[INF for _ in range(n+1)] for _ in range(2**len(traps))]
 
-    graph = {i:[] for i in range(1,n+1)}
+    
 
-    for road in roads:
-        x, y, cost = road
-        graph[x].append([y,cost,0])
-        graph[y].append([x,cost,1])
-
+    
     node_list = []
     heapq.heappush(node_list, (0,start,0)) #누적거리, 목적지, 상태
     dp[0][start] = 0
@@ -37,6 +40,7 @@ def solution(n, start, end, roads, traps):
             continue 
         
         for next_destination, distance, flag in graph[current_destination]:
+            next_state = state
             if current_destination in traps:
                 # 다음 목적지도 트랩
                 if next_destination in traps:
@@ -70,4 +74,4 @@ end = 4
 roads = [[1, 2, 1], [3, 2, 1], [2, 4, 1]]
 traps = [2,3]
 
-print(solution(n, start, end, roads, traps))
+print(solution(n, start, end, roads, traps)
