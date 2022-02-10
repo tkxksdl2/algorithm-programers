@@ -1,5 +1,3 @@
-import bisect
-
 def solution(play_time, adv_time, logs):
     play_time = time2int(play_time)
     adv_time = time2int(adv_time)
@@ -22,8 +20,8 @@ def solution(play_time, adv_time, logs):
         checking_block = logs[start_idx: end_idx]
         timesum = 0
         for s,e in checking_block:
-            if e >= s + adv_time:
-                e = s + adv_time
+            if e >= adv_endtime:
+                e = adv_endtime
             timesum += e-s
 
         start_idx = bisect_endtime(start, logs_e, flag=1)
