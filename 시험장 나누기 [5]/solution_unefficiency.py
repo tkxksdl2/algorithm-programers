@@ -16,7 +16,6 @@ def solution(k, num, links):
             start = i
     
     check_link = list(combinations(range(len(num)-1), k-1))
-    print(check_link)
     answer = float('inf')
 
     for comb in check_link:
@@ -26,8 +25,6 @@ def solution(k, num, links):
         info = {'next_cut': comb.pop(0), 'link_count':-1, 'nxt_idx':0}
         preorder(tree, start, comb, sum_lst, info,0)
         answer = min(answer, max(sum_lst))
-        print(sum_lst)
-
 
     return answer
 
