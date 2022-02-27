@@ -1,3 +1,5 @@
+from collections import deque
+
 def solution(n, path, order):
     cave = dict()
     for i in range(n):
@@ -8,44 +10,38 @@ def solution(n, path, order):
         cave[s]['sibling'].append(e)
         cave[e]['sibling'].append(s)
 
-    blocked = set(x[1] for x in order)
-    dest = set([x[0] for x in order])
+    pre = set([x[0] for x in order])
+    trail_block = set(x[1] for x in order)
     order = {x[0]:x[1] for x in order}
-    start = 0
 
-    while dest:
-        q = cave[start]['sibling'].copy()
-        visited = set([start])
-        next_d = bfs(q, cave, dest, blocked, visited, order)
-        if next_d:
-            start = next_d
-        else:
-            return False
+    q = deque([0])
+    visited = set()
+    wating = set()
 
-    return True
-
-def bfs(q, cave, dest, blocked, visited, order):
     while q:
-        print(q)
-        next = q.pop(0)
-        
-        print(next)
+        next = q.popleft()
+
         # 중복이나 조건 위반
-        if next in blocked or next in visited: 
+        if next in visited:
+            continue
+        if next in trail_block:
+            wating.add(next) 
             continue
 
         # 도착한 경우
-        if next in dest:
-            blocked.remove(order[next])
-            dest.remove(next)
-            return next
+        if next in pre:
+            # 선행을 밟았을 때 후행을 이미 방문했다면, 후행에서부터 출발.
+            if order[next] in wating:
+                q.append(order[next])
+            trail_block.remove(order[next])
         
         q += cave[next]['sibling']
         visited.add(next)
-    
-    return False
-    
 
+    if len(visited) == n:
+        return True
+
+    return False
 
 
 n = 9
