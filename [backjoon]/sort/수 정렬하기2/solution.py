@@ -1,13 +1,12 @@
 import sys
 def merge(lst, s, e):
     m = (s + e) // 2
-    left = lst[s:m]
-    right = lst[m:e]
     if e - s <= 1:
-        return con(lst, s,m,e)
+        con(lst, s,m,e)
+        return 
 
-    left = merge(lst, s, m)
-    right = merge(lst, m, e)
+    merge(lst, s, m)
+    merge(lst, m, e)
     con(lst, s, m ,e)
 
 def con(lst, s, m, e):
@@ -28,9 +27,10 @@ def con(lst, s, m, e):
         lst[s] = v
         s += 1
     
-input = sys.stdin.readline
-n = int(input())
-lst = [int(input()) for _ in range(n)]
+
+n = int(sys.stdin.readline())
+lst = [int(sys.stdin.readline()) for _ in range(n)]
 
 merge(lst,0, len(lst))
-print(lst)
+for i in lst:
+    print(i)
