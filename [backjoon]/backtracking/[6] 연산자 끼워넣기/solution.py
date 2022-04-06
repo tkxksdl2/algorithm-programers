@@ -12,7 +12,6 @@ def solution(n, nums, cals):
             if preval < maxmin[1]: maxmin[1] = preval
             return
 
-        print(step, preval)
         for c in range(4):
             if cals[c]:
                 cals[c] -= 1
@@ -35,9 +34,8 @@ def solution(n, nums, cals):
 
     dfs(1, nums[0], maxmin)
 
-    print(maxmin)
-
-    return
+    print(maxmin[0])
+    print(maxmin[1])
 
 
 
