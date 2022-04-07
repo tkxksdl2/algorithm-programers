@@ -1,8 +1,11 @@
 def solution(n):
-    force = []
     global cnt
     cnt = 0
-    
+
+    checkcol = [True for _ in range(n)]
+    check_rs = [True for _ in range(2*n)] # 우상향 대각선
+    check_ls = [True for _ in range(2*n)] # 좌상향 대각선
+
     def dfs(n, py):
         global cnt
 
@@ -11,30 +14,20 @@ def solution(n):
             return
 
         for px in range(n):
-            # 이전 퀸들의 값 y, x
-            if force:
-                isvalid = True
-                for y, x in force:
-                    if  px == x or abs(y-py) == abs(x-px):
-                        isvalid = False
-                        break
-                if isvalid:
-                    force.append([py,px])
-                    dfs(n, py+1)
-
-                    force.pop()
-            else:
-                force.append([py,px])
+            if checkcol[px] and check_rs[py+px] and check_ls[py-px+n-1]:
+                checkcol[px] = check_rs[py+px] = check_ls[py-px+n-1] = False
                 dfs(n, py+1)
+                checkcol[px] = check_rs[py+px] = check_ls[py-px+n-1] = True
 
-                force.pop()
-
+            # for y, x in force:
+            #     if  px == x or abs(y-py) == abs(x-px):
+            #         isvalid = False
+            #         break
+            
         return
-       
 
-    dfs(n, 0) 
-    
-    print('cnt:', cnt)
+    dfs(n, 0)
+    print( cnt)
     return
 
 
