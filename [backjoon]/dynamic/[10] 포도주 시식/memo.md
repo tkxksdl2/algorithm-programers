@@ -1,5 +1,5 @@
-### 경주로 건설
-link : [경주로 건설](https://www.acmicpc.net/problem/2156)
+### 포도주 시식
+link : [포도주 시식](https://www.acmicpc.net/problem/2156)
 
 ---------------------------------
 
