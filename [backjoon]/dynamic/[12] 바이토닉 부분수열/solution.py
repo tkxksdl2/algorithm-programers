@@ -12,10 +12,7 @@ def solution(n, lst):
     for i in range(n):
         ans = max(ans, inc[i] + dec[i] - 1)
 
-    print(inc)
-    print(dec)
     print(ans)
-
 
 n = int(input())
 lst = list(map(int, input().split()))
