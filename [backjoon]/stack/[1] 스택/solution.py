@@ -14,7 +14,7 @@ class Stack():
             else:   self.pop()
         elif w == 'top':
             if      self.isEmpty(): print(-1)
-            else:   print(self.arr[0])
+            else:   print(self.arr[self.len-1])
         elif w == 'empty':
             print(self.isEmpty())
         elif w == 'size':
